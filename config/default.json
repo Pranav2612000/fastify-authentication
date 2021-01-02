@@ -1,5 +1,0 @@
-{
-  "devURI":"mongodb+srv://root:root@cluster0.znemd.mongodb.net/<dbname>?retryWrites=true&w=majority",
-  "JWT_SECRET":"jvnrnvakdudfja",
-  "COOKIE_NAME":"SESSION_ID"
-}
