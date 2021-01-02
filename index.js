@@ -2,13 +2,16 @@ const fastify = require('fastify');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const config = require('config');
 
 const connectDB = require('./config/db');
 const UserCredentials = require('./models/UserCredentials');
+const verifyJWT = require('./decorators/jwt');
 
-const COOKIE_NAME = "SESSION_ID";
-const JWT_SECRET = "HELL0_w0RLd";
+const JWT_SECRET = config.get("JWT_SECRET");
+const COOKIE_NAME = config.get("COOKIE_NAME");
 
+// Connect to DB
 connectDB();
 
 // Configure the fastify server
@@ -101,26 +104,6 @@ function routes() {
     },
   });
 }
-
-function verifyJWT(request, reply, done) {
-  if(!request.cookies) {
-    reply.status(400).send({usr_err: "You need to be logged in to view this page", dev_err: "UNAUTHORIZED_ACCESS"});
-    return;
-  }
-  const cookie = request.cookies[COOKIE_NAME]
-
-  const verificationCallback = (err, data) => {
-    if(err) {
-      reply.status(400).send({usr_err: "You need to be logged in to view this page", dev_err: "UNAUTHORIZED_ACCESS"});
-      return;
-    }
-    request.params.username = data.username;
-    return done();
-  };
-
-  jwt.verify(cookie, JWT_SECRET, verificationCallback);
-};
-
 
 app.listen(3000, function(err, address) {
   if(err) {
