@@ -1,0 +1,3 @@
+{
+  "devURI":"mongodb+srv://root:root@cluster0.znemd.mongodb.net/<dbname>?retryWrites=true&w=majority"
+}

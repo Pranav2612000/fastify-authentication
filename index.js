@@ -2,28 +2,14 @@ const fastify = require('fastify');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const UserCredentials = require('./models/UserCredentials');
 
-const mongoURI = process.env.MONGO_URI ||
-  "mongodb+srv://root:root@cluster0.znemd.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const connectDB = require('./config/db');
+const UserCredentials = require('./models/UserCredentials');
 
 const COOKIE_NAME = "SESSION_ID";
 const JWT_SECRET = "HELL0_w0RLd";
 
-// Connect to mongoDB
-try {
-  mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    dbName: 'dev',
-  }).then(() => {
-    console.log("MongoDB connected");
-  });
-} catch(err) {
-  console.error(error);
-}
+connectDB();
 
 // Configure the fastify server
 const app = fastify()
