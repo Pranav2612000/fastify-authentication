@@ -33,6 +33,7 @@ app.post('/register', async function (request, reply) {
     if(user) {
       reply.status(400).send({usr_err: "A user with the username exists. Retry with a different username",
                               dev_err: "USER_TAKEN"});
+      return;
     } else {
       let hash_pass;
       try {
@@ -40,19 +41,53 @@ app.post('/register', async function (request, reply) {
       } catch(err) {
         console.log(err);
         reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error hashing password"});
+        return;
       }
       const new_user = new UserCredentials({username, password: hash_pass});
       try {
         await new_user.save()
         reply.send("Success");
+        return;
       } catch(err) {
         console.log(err);
         reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error saving to db"});
+        return;
       }
     }
   } catch(err) {
     console.log(err);
     reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error searching in db"});
+    return;
+  }
+});
+
+app.post('/login', async function(request, reply) {
+  const username = request.body.username;
+  const password = request.body.password;
+  try {
+    const user = await UserCredentials.findOne({username});
+    if(!user) {
+      reply.status(400).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
+      return;
+    }
+    try {
+      const isMatch = await bcrypt.compare(password, user.password)
+      if(!isMatch) {
+        reply.status(400).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
+        return;
+      } else {
+        reply.status(200).send({msg: "SUCESS"});
+        return;
+      }
+    } catch(err) {
+      console.log(err);
+      reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error hashing password"});
+      return;
+    }
+  } catch(err) {
+    console.log(err);
+    reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error searching in db"});
+    return;
   }
 });
 
