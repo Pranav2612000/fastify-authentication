@@ -111,7 +111,7 @@ function routes() {
     url: '/home',
     preValidation: app.auth([app.verifyJWT]),
     handler: (request, reply) => {
-      reply.send("Home");
+      reply.send(`Logged In as ${request.params.username}`);
     },
   });
 }
