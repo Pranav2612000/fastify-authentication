@@ -13,6 +13,9 @@
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "fastify": "^3.9.2",
+    "fastify-auth": "^1.0.1",
+    "fastify-cookie": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.9"
   }
 }
