@@ -1,5 +1,6 @@
 const fastify = require('fastify');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const UserCredentials = require('./models/UserCredentials');
 
 const app = fastify();
@@ -33,9 +34,17 @@ app.post('/register', async function (request, reply) {
       reply.status(400).send({usr_err: "A user with the username exists. Retry with a different username",
                               dev_err: "USER_TAKEN"});
     } else {
-      const new_user = new UserCredentials({username, password});
+      let hash_pass;
+      try {
+        hash_pass = await bcrypt.hash(password, 10);
+      } catch(err) {
+        console.log(err);
+        reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error hashing password"});
+      }
+      const new_user = new UserCredentials({username, password: hash_pass});
       try {
         await new_user.save()
+        reply.send("Success");
       } catch(err) {
         console.log(err);
         reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error saving to db"});
@@ -45,7 +54,6 @@ app.post('/register', async function (request, reply) {
     console.log(err);
     reply.status(500).send({usr_err: "Something went wrong! Please try again", dev_err: "Error searching in db"});
   }
-  reply.send("Success");
 });
 
 app.listen(3000, function(err, address) {
