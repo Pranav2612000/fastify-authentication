@@ -1,5 +1,5 @@
-node_modules/*
-config/default.json
+**/node_modules/*
+**/config/default.json
 
-globalConfig.json
-.env
+**/globalConfig.json
+**/.env

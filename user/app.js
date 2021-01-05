@@ -1,5 +1,6 @@
 // Configure the fastify server
 const fastify = require('fastify');
+require('dotenv').config();
 
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
