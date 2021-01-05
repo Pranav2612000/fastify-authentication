@@ -25,7 +25,7 @@ async function registerRouter (app) {
         const new_user = new UserCredentials({username, password: hash_pass});
         try {
           await new_user.save()
-          reply.send("Success");
+          reply.status(200).send({msg: "SUCCESS"});
           return;
         } catch(err) {
           console.log(err);
