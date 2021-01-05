@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const config = require('config');
 
-const mongoURI = config.get('devURI');
+const mongoURI = process.env.devURI;
 
 // Connect to mongoDB
 function connectDB() {

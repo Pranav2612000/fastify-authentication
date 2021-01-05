@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-const config = require('config');
 
-const JWT_SECRET = config.get("JWT_SECRET");
-const COOKIE_NAME = config.get("COOKIE_NAME");
+const JWT_SECRET = process.env.JWT_SECRET;
+const COOKIE_NAME = process.env.COOKIE_NAME;
 
 function verifyJWT(request, reply, done) {
   if(!request.cookies) {

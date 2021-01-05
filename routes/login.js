@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const config = require('config');
 const jwt = require('jsonwebtoken');
 
 const UserCredentials = require('../models/UserCredentials');
 
-const JWT_SECRET = config.get("JWT_SECRET");
-const COOKIE_NAME = config.get("COOKIE_NAME");
+const JWT_SECRET = process.env.JWT_SECRET;
+const COOKIE_NAME = process.env.COOKIE_NAME;
 
 async function loginRouter(app) {
   app.post('/login', async function(request, reply) {
