@@ -15,13 +15,13 @@ async function loginRouter(app) {
     try {
       const user = await UserCredentials.findOne({username});
       if(!user) {
-        reply.status(400).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
+        reply.status(401).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
         return;
       }
       try {
         const isMatch = await bcrypt.compare(password, user.password)
         if(!isMatch) {
-          reply.status(400).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
+          reply.status(401).send({usr_err: "Incorrect username or password", dev_err: "INCORRECT_CREDENTIALS"});
           return;
         } else {
           const token = await jwt.sign({username}, JWT_SECRET);
